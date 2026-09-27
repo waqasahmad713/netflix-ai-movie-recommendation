@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -29,13 +30,16 @@ similarity_matrix = cosine_similarity(embeddings)
 # =========================
 # TMDB API KEY
 # =========================
-TMDB_API_KEY = "c835fa9931977fde5eb136086eedc9ad"
+TMDB_API_KEY = os.getenv("TMDB_API_KEY", "")
 
 # =========================
 # POSTER FUNCTION (ROBUST FIX)
 # =========================
 @st.cache_data
 def get_poster(movie_name):
+
+    if not TMDB_API_KEY:
+        return "https://via.placeholder.com/300x450?text=No+Image"
 
     try:
         query = movie_name.split("(")[0].strip()
